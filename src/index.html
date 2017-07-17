@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta 
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	>
+	<title>乐租生活</title>
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+	<% htmlWebpackPlugin.files.chunks[chunk].css.forEach(function(css){ %>
+	<link rel="stylesheet" href="<%= css %>">
+	<% }) %>
+	<% } %>
+</head>
+<body>
+	<div id="app"></div>
+ 	<script>
+        <% if(htmlWebpackPlugin.options.env==='local') {%>
+            window.rootOrigin = 'http://m.iLikezu.cn'
+        <% } %>
+        <% if(htmlWebpackPlugin.options.env==='production') {%>
+            window.rootOrigin = 'http://mp.ilikezu.cn'
+        <% } %>
+    </script>
+	<% var i = 0; for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+	<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" seq="<%= i++ %>"></script>
+	<% } %>
+</body>
+</html>
