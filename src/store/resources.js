@@ -2,6 +2,7 @@
  * create by JOCS 2017.06.23
  */
 import { getFinalParams } from './help'
+import qs from 'querystring'
 import axios from 'axios'
 
 const { rootOrigin } = window // 'http://m.iLikezu.cn'
@@ -11,16 +12,22 @@ const fetch = (path, method, data) => {
 	const url = method === 'GET'
 		? `${path}?${Object.keys(params).sort().map(k => `${k}=${params[k]}`).join('&')}`
 		: path
+
 	const options = {
 		method,
 		url,
-		responseType: 'json',
-		data: {body: params}
+		responseType: 'json'
 	}
 	if (method === 'GET') delete options.data
 	if (method === 'POST') {
-		const key = options.data.body['api_u_key']
-		key && (options.data.body['api_u_key'] = decodeURIComponent(key))
+		Object.assign(options, {headers: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}})
+
+		params['api_u_key'] = decodeURIComponent(params['api_u_key'])
+
+		options.data = qs.stringify(params)
+
 		// console.log(JSON.stringify(options, null, 4))
 	}
 	return new Promise((resolve, reject) => {
@@ -89,6 +96,6 @@ export default {
 	// 下单接口
 	order: genResource(`${rootOrigin}/api/order/addOrder.xhtml`),
 	// 微信支付
-	wechatPay: genResource(`${rootOrigin}/api/pay/weixinpay.xhtml`)
+	wechatPay: genResource(`${rootOrigin}/api/pay/mppay.xhtml`)
 }
 
