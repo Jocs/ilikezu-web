@@ -25,7 +25,8 @@
     "Rx": true,
     "angularDragula": true,
     "CKEDITOR": true,
-    "io": true
+    "io": true,
+    "WeixinJSBridge": true
   },
 
   "parser": "babel-eslint",

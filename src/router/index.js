@@ -19,6 +19,7 @@ const Rule = resolve => require(['../views/Rule.vue'], resolve)
 const About = resolve => require(['../views/About.vue'], resolve)
 const Orders = resolve => require(['../views/Orders.vue'], resolve)
 const Fan = resolve => require(['../views/Fan.vue'], resolve)
+const OrderResult = resolve => require(['../views/OrderResult.vue'], resolve)
 
 
 Vue.use(VueRouter)
@@ -71,6 +72,9 @@ const routes = [{
 }, {
 	path: '/fans',
 	component: Fan
+}, {
+	path: '/orderResult',
+	component: OrderResult
 }, {
 	path: '/',
 	redirect: '/home'

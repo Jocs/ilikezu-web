@@ -90,7 +90,7 @@
 <script>
 	import BarTop from '../components/barTop.vue'
 	import Product from '../components/product.vue'
-	import { errorTip } from '../common/util'
+	import { errorTip, wxPay } from '../common/util'
 	// import { DatetimePicker } from 'mint-ui'
 
 	import { mapState } from 'vuex'
@@ -181,11 +181,21 @@
 					})
 
 					if (data && data.tradeNo) {
+						console.log(data.tradeNo)
 						const { tradeNo } = data
 						const result = await this.$store.dispatch('WECHAT_PAY', {
 							tradeNo
 						})
-						console.log(result)
+						if (result && result.data && result.data.params) {
+							wxPay(result.data.params, res => {
+								console.log(res)
+								if (res.err_msg === 'get_brand_wcpay_request:ok') {
+									this.$router.push('/orderResult')
+								} else {
+									console.log(res.errMsg)
+								}
+							})
+						}
 					} else {
 						throw new Error('failed in order')
 					}
