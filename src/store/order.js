@@ -54,6 +54,12 @@ const actions = {
 				commit('SET_ORDER_STATUS', {status: true, hasMore: false})
 				// console.log(msg)
 			})
+	},
+	ORDER({commit}, params) {
+		return Resources.order.get(params)
+	},
+	WECHAT_PAY({commit}, params) {
+		return Resources.wechatPay.post(params)
 	}
 }
 

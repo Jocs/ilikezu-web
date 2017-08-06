@@ -21,23 +21,27 @@ const mutations = {
 
 const actions = {
 	GET_USER_INFO({commit}) {
-		Resources.userInfo.get()
+		return Resources.userInfo.get()
 			.then(res => {
 				if (res.data) {
 					return res.data
 				} else {
-					return Promise.reject()
+					commit('SET_LOGIN_STATUS', {status: false, key: ''})
+					return Promise.reject(res.msg)
 				}
 			})
 			.then(res => {
 				let {headUri, nickName, recordId, status} = res.member
-				headUri = res.basePic + headUri + '@200w' // 裁剪图片200px width
+				headUri = /^http:\/\//.test(headUri) ? headUri : res.basePic + headUri + '@200w' // 裁剪图片200px width
 				commit('SET_USER_INFO', {headUri, nickName, recordId, status})
+				return {headUri, nickName, recordId, status}
 			})
-			.catch(() => console.log('获取用户信息失败'))
 	},
 	UPDATE_USER_INFO({commit}, params) {
 		return Resources.updateUserInfo.get(params)
+	},
+	GET_FANS({commit}) {
+		return Resources.fanList.get({from: 0, max: 6})
 	}
 }
 

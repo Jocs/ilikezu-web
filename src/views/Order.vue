@@ -74,7 +74,7 @@
 			<div>
 				实付金额：<span class="money">¥{{total | fixed}}</span>
 			</div>
-			<div class="weixin">微信支付</div>
+			<div class="weixin" @click="order">微信支付</div>
 		</div>
 		<mt-datetime-picker
 			ref="datePicker"
@@ -164,6 +164,37 @@
 				} else {
 					this.$router.push('/createAddress')
 				}
+			},
+			/**
+			 * 下单，获取订单号
+			 */
+			async order() {
+				// { proId: Long, addressId: Long, number: Integer, deliverTime: TimeStamp }
+				const { recordId: proId } = this.product.detail
+				const { recordId: addressId } = this.defaultAddress
+				const { number, pickerValue } = this
+				const deliverTime = +pickerValue
+
+				try {
+					const { data } = await this.$store.dispatch('ORDER', {
+						proId, addressId, number, deliverTime
+					})
+
+					if (data && data.tradeNo) {
+						const { tradeNo } = data
+						const result = await this.$store.dispatch('WECHAT_PAY', {
+							tradeNo
+						})
+						console.log(result)
+					} else {
+						throw new Error('failed in order')
+					}
+
+				} catch(e) {
+					console.log(e)
+					errorTip('下单失败，请稍候再试！')
+				}
+
 			}
 		}
 	}

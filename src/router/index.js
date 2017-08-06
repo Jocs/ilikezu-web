@@ -18,6 +18,7 @@ const PersonalSetting = resolve => require(['../views/PersonalSetting.vue'], res
 const Rule = resolve => require(['../views/Rule.vue'], resolve)
 const About = resolve => require(['../views/About.vue'], resolve)
 const Orders = resolve => require(['../views/Orders.vue'], resolve)
+const Fan = resolve => require(['../views/Fan.vue'], resolve)
 
 
 Vue.use(VueRouter)
@@ -53,7 +54,7 @@ const routes = [{
 	path: '/collection',
 	component: Collection
 }, {
-	path: '/blank/:path?',
+	path: '/blank/:path?/:ukey?',
 	component: Blank
 }, {
 	path: '/personalSetting',
@@ -67,6 +68,9 @@ const routes = [{
 }, {
 	path: '/orders',
 	component: Orders
+}, {
+	path: '/fans',
+	component: Fan
 }, {
 	path: '/',
 	redirect: '/home'

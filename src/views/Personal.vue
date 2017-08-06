@@ -88,8 +88,15 @@
 			})
 		},
 		methods: {
-			getUserInfo() {
-				this.$store.dispatch('GET_USER_INFO')
+			async getUserInfo() {
+				try {
+					const user = await this.$store.dispatch('GET_USER_INFO')
+					console.log(user)
+				} catch(e) {
+					console.log(e)
+					this.$router.push('/login')
+				}
+				
 			},
 			logOut() {
 				this.$store.dispatch('LOGOUT')

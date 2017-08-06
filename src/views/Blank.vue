@@ -1,6 +1,5 @@
 <template>
 	<div class="blank">
-		blank
 	</div>
 </template>
 
@@ -16,8 +15,15 @@
 
 		},
 		created() {
-			this.$nextTick(() => {
-
+			this.$nextTick(async () => {
+				const { path, ukey } = this.$route.params
+				console.log(path, ukey)
+				if (ukey) {
+					await this.$store.dispatch('LOGIN_STATUS_SET', {status: true, key: ukey})
+					this.$router.push(`/${path}`)
+				} else {
+					this.$router.push('/login')
+				}
 			})
 		},
 		methods: {

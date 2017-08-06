@@ -5,6 +5,7 @@
 import express from 'express'
 import path from 'path'
 import child_process from 'child_process'
+import proxy from 'express-http-proxy';
 import webpackInit from '../webpack/server.config'
 
 const app = express()
@@ -12,6 +13,9 @@ const app = express()
 webpackInit(app)
 
 app.use(express.static(path.join(__dirname, '../dist')))
+
+
+app.use('/', proxy('http://m.iLikezu.cn'))
 
 app.listen(8888, err => {
 

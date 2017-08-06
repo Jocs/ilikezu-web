@@ -135,8 +135,19 @@
 				const action = this.collected ? 'CANCEL_COLLECT' : 'ADD_COLLECT'
 				this.$store.dispatch(action, params)
 			},
-			goOrder() {
-				this.$router.push(`/order/${this.recordId}`)
+			async goOrder() {
+				if (this.isLogin) {
+
+					const { data } = await this.$store.dispatch('CHECK_IS_LOGIN')
+					if (data && data.isWeixin) {
+						this.$router.push(`/order/${this.recordId}`)
+					} else {
+						this.$router.push('/login')
+					}
+
+				} else {
+					this.$router.push('/login')
+				}
 			}
 		}
 	}

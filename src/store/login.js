@@ -52,6 +52,12 @@ const actions = {
 	PRE_WEIXIN({commit}, params) {
 		return Resources.preWeiXinLogin.get(params)
 			.then(res => res.data ? res.data : Promise.reject(res.msg))
+	},
+	LOGIN_STATUS_SET({commit}, params) {
+		return commit('SET_LOGIN_STATUS', params)
+	},
+	CHECK_IS_LOGIN({commit}) {
+		return Resources.checkIsLogin.get()
 	}
 
 }

@@ -17,8 +17,12 @@ const fetch = (path, method, data) => {
 		responseType: 'json',
 		data: {body: params}
 	}
-	// console.log(JSON.stringify(options))
 	if (method === 'GET') delete options.data
+	if (method === 'POST') {
+		const key = options.data.body['api_u_key']
+		key && (options.data.body['api_u_key'] = decodeURIComponent(key))
+		// console.log(JSON.stringify(options, null, 4))
+	}
 	return new Promise((resolve, reject) => {
 		axios(options)
 			.then(response => {
@@ -77,6 +81,14 @@ export default {
 	// 修改个人信息
 	updateUserInfo: genResource(`${rootOrigin}/api/updateMemberInfo.xhtml`),
 	// 获取订单列表
-	orderList: genResource(`${rootOrigin}/api/order/listMyOrder.xhtml`)
+	orderList: genResource(`${rootOrigin}/api/order/listMyOrder.xhtml`),
+	// 详情页面，当点击立即下单时，判断是否登录
+	checkIsLogin: genResource(`${rootOrigin}/api/isMemberAvaliale.xhtml`),
+	// /api/listrecommenfriends.xhtml  我的粉丝列表
+	fanList: genResource(`${rootOrigin}/api/listrecommenfriends.xhtml`),
+	// 下单接口
+	order: genResource(`${rootOrigin}/api/order/addOrder.xhtml`),
+	// 微信支付
+	wechatPay: genResource(`${rootOrigin}/api/pay/weixinpay.xhtml`)
 }
 
