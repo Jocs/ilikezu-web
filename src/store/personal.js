@@ -10,12 +10,32 @@ const state = {
 		nickName: '',
 		recordId: '',
 		status: ''
+	},
+	fans: [],
+	faLoading: {
+		status: false,
+		hasMore: true
 	}
 }
 
 const mutations = {
 	SET_USER_INFO(state, userInfo) {
 		state.userInfo = userInfo
+	},
+	SET_FANS(state, {payload, type}) {
+		switch (type) {
+			case 'ADD': {
+				state.fans = [...state.fans, ...payload]
+				break
+			}
+			case 'RESET': {
+				state.fans = payload
+				break
+			}
+		}
+	},
+	SET_FANS_STATUS(state, faLoading) {
+		state.faLoading = faLoading
 	}
 }
 
@@ -40,8 +60,29 @@ const actions = {
 	UPDATE_USER_INFO({commit}, params) {
 		return Resources.updateUserInfo.get(params)
 	},
-	GET_FANS({commit}) {
-		return Resources.fanList.get({from: 0, max: 6})
+	GET_FANS({commit}, params) {
+		if (state.faLoading.status || !state.faLoading.hasMore) return false
+		commit('SET_FANS_STATUS', {status: true, hasMore: true})
+		return Resources.fanList.get(params)
+			.then(res => res.data && res.data.result.length > 0 ? res.data : Promise.reject(res.msg))
+			.then(res => {
+				res.result.forEach(fan => {
+					if (!/^https?:\/\//.test(fan.headPic)) {
+						fan.headPic = `${res.basePic}${fan.headPic}`
+					}
+				})
+				console.log(res.result)
+				if (params.from === 0) {
+					commit('SET_FANS', {type: 'RESET', payload: res.result})
+				} else {
+					commit('SET_FANS', {type: 'ADD', payload: res.result})
+				}
+				commit('SET_FANS_STATUS', {status: false, hasMore: true})
+			})
+			.catch(msg => {
+				commit('SET_FANS_STATUS', {status: true, hasMore: false})
+				// console.log(msg)
+			})
 	}
 }
 
