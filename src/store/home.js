@@ -42,8 +42,18 @@ const actions = {
 	GET_BANNER({commit}, params) {
 		Resources.getBanner.get(params = {from: 0, maxNum: 5})
 			.then(res => {
-				console.log(res)
-				const banner = res.data.list.map(l => `${res.data.basePic}${JSON.parse(l.content).logo}`)
+				const banner = res.data.list.map(l => {
+					let ob
+					try {
+						ob = JSON.parse(l.content)
+					} catch (e) {
+						ob = {imgUrl: '', productId: -1}
+					}
+					return {
+						imgUrl: `${res.data.basePic}${ob.logo}`,
+						productId: (ob.link.match(/proTypeId=(\d+)$/) || [])[1]
+					}
+				})
 				commit('SET_BANNER', banner)
 			})
 	},

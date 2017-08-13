@@ -1,9 +1,10 @@
 <template>
-	<li class="product"
+	<li 
+		class="product"
 		@click="goDetail(product.recordId)"
 	>
 		<div class="image-wrapper">
-			<img :src="product.src || product.logoUri" alt="">
+			<img :src="product.src || product.logoUri" alt="商品图片">
 		</div>
 		<div class="product-info">
 			<div class="title">{{product.title}}</div>
@@ -35,7 +36,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.product {
 		height: 5rem;
 		width: 100%;

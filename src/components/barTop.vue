@@ -13,11 +13,18 @@
 			text: {
 				type: String,
 				required: true
+			},
+			path: {
+				type: String
 			}
 		},
 		methods: {
 			back() {
-				this.$router.back()
+				if (this.path) {
+					this.$router.push(this.path)
+				} else {
+					this.$router.back()
+				}
 			}
 		}
 	}

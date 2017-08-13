@@ -32,7 +32,7 @@
 <script>
 	import BarTop from '../components/barTop.vue'
 	import BarBottom from '../components/barBottom.vue'
-	import Product from '../components/Product.vue'
+	import Product from '../components/product.vue'
 	import { mapState } from 'vuex'
 
 	export default {

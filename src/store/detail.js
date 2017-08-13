@@ -21,21 +21,25 @@ const addAttrs = (json, sizeMap) => {
 	} else if (json.node === 'element' && json.tag === 'img') {
 		if (!json.attr) json.attr = {}
 		const { src: dataSrc } = json.attr
-		const { width, height } = JSON.parse(sizeMap[dataSrc])
-		const radio = height / width
-		const src = `${dataSrc}@50w`
-		Object.assign(json.attr, {src, 'data-src': dataSrc}, {'class': 'preview lazy'})
-		const child = {attr: json.attr, node: 'element', tag: 'img'}
-		const obj = {
-			child: [child],
-			attr: {
-				'class': 'progressive',
-				'style': `width: 100vw; height: calc(${radio} * 100vw);`
-			},
-			node: 'element',
-			tag: 'div'
+		try	{ // 解决sizeMap中有可能JSON.parse会报错问题
+			const { width, height } = JSON.parse(sizeMap[dataSrc])
+			const radio = height / width
+			const src = `${dataSrc}@50w`
+			Object.assign(json.attr, {src, 'data-src': dataSrc}, {'class': 'preview lazy'})
+			const child = {attr: json.attr, node: 'element', tag: 'img'}
+			const obj = {
+				child: [child],
+				attr: {
+					'class': 'progressive',
+					'style': `width: 100vw; height: calc(${radio} * 100vw);`
+				},
+				node: 'element',
+				tag: 'div'
+			}
+			Object.assign(json, obj)
+		} catch (e) {
+			console.log(e)
 		}
-		Object.assign(json, obj)
 	}
 }
 
@@ -62,7 +66,7 @@ const mutations = {
 
 const actions = {
 	GET_PRODUCT({commit}, params) {
-		return Resources.getProduct.get(params)
+		return Resources.getProduct.post(params)
 			.then(res => res.data)
 			.then(res => {
 				res.product.logoUri = `${res.basePic}${res.product.logoUri}`
@@ -103,6 +107,12 @@ const actions = {
 			.then(res => {
 				res.isSuccess && commit('SET_COLLECT_STATUS', false)
 			})
+	},
+	GET_SHARE({ commit }) {
+		return Resources.getShare.get()
+	},
+	GET_WEIXIN_CONFIG({ commit }, params) {
+		return Resources.getWeiXinConfig.post(params)
 	}
 }
 

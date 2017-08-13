@@ -31,7 +31,7 @@ const routes = [{
 	path: '/list/:searchKey?/:proTypeId?',
 	component: List
 }, {
-	path: '/detail/:recordId',
+	path: '/detail/:recordId/:f?',
 	component: Detail
 }, {
 	path: '/personal',

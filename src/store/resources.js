@@ -96,6 +96,10 @@ export default {
 	// 下单接口
 	order: genResource(`${rootOrigin}/api/order/addOrder.xhtml`),
 	// 微信支付
-	wechatPay: genResource(`${rootOrigin}/api/pay/mppay.xhtml`)
+	wechatPay: genResource(`${rootOrigin}/api/pay/mppay.xhtml`),
+	// 获取_f值
+	getShare: genResource(`${rootOrigin}/api/getMemberRecommentID.xhtml`),
+	// 获取微信参数
+	getWeiXinConfig: genResource(`${rootOrigin}/api/getMpShareParams.xhtml`)
 }
 

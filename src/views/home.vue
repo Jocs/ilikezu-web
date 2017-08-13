@@ -14,10 +14,10 @@
 			<div class="lz-swipper">
 				<mt-swipe :auto="4000">
 					<mt-swipe-item
-						v-for="(img, index) of banner"
+						v-for="(b, index) of banner"
 						:key="index"
 					>
-						<img :src="img" alt="">
+						<img :src="b.imgUrl" alt="" @click="jump(b.productId)">
 					</mt-swipe-item>
 				</mt-swipe>
 			</div>
@@ -89,6 +89,9 @@
 			})
 		},
 		methods: {
+			jump(id) {
+				this.$router.push(`/detail/${id}`)
+			},
 			handleInput(event) {
 				this.value = event
 			},

@@ -2,6 +2,7 @@
 	<div class="detail">
 		<bar-top
 			:text="title"
+			:path="topPath"
 		></bar-top>
 		<div class="scroll-wrapper">
 			<div class="lz-swipper">
@@ -75,6 +76,7 @@
 	import Content from '../components/content.vue'
 	import { Indicator } from 'mint-ui'
 	import { mapState } from 'vuex'
+	import { setCookieNoShadow, weixinConfig } from '../common/util'
 
 	export default {
 		components: {
@@ -84,6 +86,7 @@
 		data() {
 			return {
 				title: '物品详情',
+				topPath: '/home',
 				recordId: ''
 			}
 		},
@@ -99,22 +102,70 @@
 			this.$store.dispatch('RESET_PRODUCT')
 		},
 		created() {
-			this.$nextTick(() => {
-				const { recordId } = this.$route.params
+			this.$nextTick(async () => {
+				const { recordId, f } = this.$route.params
 				this.recordId = recordId
-				this.getProduct()
-				// setTimeout(() => this.checkCollect(), 1000)
 				this.checkCollect()
+				if (f) {
+					setCookieNoShadow('_f', f)
+				}
+				const getParams = () => {
+					const params = { shareUrl: window.location.href.split('#')[0] }
+					if (f) Object.assign(params, {'_f': f})
+					return params
+				}
+
+				await this.getProduct()
+
+				if (this.isLogin && !f) { // 自有登录用户才有f值，isLogin只是前端判断。后端还需验证是否登录
+					this.getShare()
+					.then(_f => {
+						const params = getParams()
+						this.getShareConfig({...params, _f})
+						.catch(::console.log)
+					})
+					.catch(::console.log)
+				} else {
+					const params = getParams()
+					this.getShareConfig(params)
+					.catch(::console.log)
+				}
+
 			})
 		},
 		methods: {
+			async getShare() {
+				const { data } = await this.$store.dispatch('GET_SHARE')
+
+				if (data._f) {
+					this.$router.push(`/detail/${this.recordId}/${data._f}`)
+					return data._f
+				} else {
+					return Promise.reject('没有获取到F值，静默处理！')
+				}
+			},
+
+			async getShareConfig(params) {
+
+				const { data } = await this.$store.dispatch('GET_WEIXIN_CONFIG', params)
+				if (data.params) {
+					const { nickName } = data
+					// title, desc, imgUrl
+					const { describer, logoUri: imgUrl, title } = this.product.detail
+					const desc = `${nickName}${describer}`
+					weixinConfig({ ...data.params, title, desc, imgUrl })
+				} else {
+					return Promise.reject('获取微信分享配置参数失败！')
+				}
+			},
+
 			getProduct() {
 				Indicator.open({
 					text: '加载中...',
 					spinnerType: 'fading-circle'
 				})
 				const { recordId } = this
-				this.$store.dispatch('GET_PRODUCT', {recordId})
+				return this.$store.dispatch('GET_PRODUCT', {recordId})
 					.then(res => {
 						Indicator.close()
 					})
