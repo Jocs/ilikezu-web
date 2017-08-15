@@ -124,6 +124,9 @@
 			margin-bottom: 2.5rem;
 			overflow: auto;
 			-webkit-overflow-scrolling: touch;
+			.mint-swipe-indicator.is-active {
+				background: #00bbe4;
+			}
 			.loading {
 				height: 2rem;
 				text-align: center;

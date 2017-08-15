@@ -37,6 +37,10 @@
 <style lang="scss">
 	.product-content {
 		background: #fff;
+		p {
+			word-break: break-all;
+			padding: 0 .5rem;
+		}
 		br {
 			display: none;
 		}

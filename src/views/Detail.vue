@@ -23,7 +23,7 @@
 					<div class="price-des">{{product.detail.baseDay + '天起租'}}</div>
 				</div>
 				<div class="yajin">
-					线下支付押金：¥<span>{{product.detail.yajin | fixed}}</span>
+					线上支付押金：¥<span>{{product.detail.yajin | fixed}}</span>
 				</div>
 			</div>
 			<div class="info">
@@ -39,11 +39,11 @@
 					<span>{{product.detail.addTime}}</span>
 				</div>
 				<div class="item">
-					<label>产品购入价格：</label>
+					<label>购入价格：</label>
 					<span>{{product.detail.orgPrice | fixed}} 元</span>
 				</div>
 				<div class="item">
-					<label>产品购入日期：</label>
+					<label>购入日期：</label>
 					<span>{{product.detail.inTime}}</span>
 				</div>
 				<div class="item">
@@ -153,7 +153,8 @@
 					// title, desc, imgUrl
 					const { describer, logoUri: imgUrl, title } = this.product.detail
 					const desc = `${nickName}${describer}`
-					weixinConfig({ ...data.params, title, desc, imgUrl })
+					const link = window.location.href
+					weixinConfig({ ...data.params, title, desc, imgUrl, link })
 				} else {
 					return Promise.reject('获取微信分享配置参数失败！')
 				}

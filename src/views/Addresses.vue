@@ -53,6 +53,7 @@
 			<a href="javascript:;" 
 				@click="useAddress"
 				class="use"
+				:class="{'in-active': addresses.length === 0}"
 				v-if="from === 'order'"
 			>立即使用</a>
 			<a 
@@ -87,22 +88,27 @@
 			...mapState(['addresses', 'defaultAddress'])
 		},
 		created() {
-			this.$nextTick(() => {
-				this.getAddress()
+			this.$nextTick(async () => {
 				const { from } = this.$route.params
 				this.from = from
+				const addresses = await this.getAddress()
+				if (from === 'order' && this.defaultAddress) {
+					this.selectAddress = this.defaultAddress
+				} else if (addresses.length > 0) {
+					this.selectAddress = addresses[0]
+				}
 			})
 		},
 		methods: {
-			getAddress() {
-				this.$store.dispatch('GET_ADDRESS')
-					.then(res => {
-						const { from } = this.$route.params
-						if (from === 'order') {
-							this.selectAddress = this.defaultAddress || res[0]
-						}
-					})
-					.catch(errorTip)
+			async getAddress() {
+				const { from } = this
+				try {
+					const res = await this.$store.dispatch('GET_ADDRESS')
+					if (Array.isArray(res)) return res
+				} catch (e) {
+					errorTip(e)
+					return []
+				}
 			},
 			select(a) {
 				this.selectAddress = a
@@ -113,22 +119,35 @@
 			editAddress(recordId) {
 				this.$router.push(`/editAddress/${recordId}`)
 			},
-			deleteAddress(addressId) {
-				MessageBox.confirm('确定删除此收货地址？')
-					.then(() => {
-						return this.$store.dispatch('DELETE_ADDRESS', {addressId})
-					})
-					.then(res => {
-						if (res.isSuccess) {
-							this.getAddress()
-						} else {
-							Promise.reject(res.msg)
+			async deleteAddress(addressId) {
+				try {
+					await MessageBox.confirm('确定删除此收货地址？')
+					const res = await this.$store.dispatch('DELETE_ADDRESS', { addressId })
+					if (res.isSuccess) {
+						const addresses = await this.getAddress()
+						if (addressId === this.selectAddress.recordId) {
+							if (addresses.length > 0) {
+								this.selectAddress = addresses[0]
+							} else {
+								this.selectAddress = {
+									recordId: ''
+								}
+							}
 						}
-					})
-					.catch(::console.log)
+						if (addressId === this.defaultAddress.recordId) {
+							this.$store.dispatch('GET_DEFAULT_ADDRESS', null)
+						}
+					} else {
+						throw new Error(res.msg)
+					}
+				} catch (e) {
+					console.log(e)
+				}
 			},
 			useAddress() {
-				this.$store.dispatch('GET_DEFAULT_ADDRESS', this.selectAddress)
+				if (this.selectAddress.recordId) {
+					this.$store.dispatch('GET_DEFAULT_ADDRESS', this.selectAddress)
+				}
 				this.$router.back()
 			}
 		}
@@ -241,6 +260,9 @@
 			}
 			a.add {color: #fff;background: #00bbe4;}
 			a.use {color: #00bbe4; background: #fff;}
+			a.use.in-active {
+				color: #eee;
+			}
 		}
 	}
 </style>

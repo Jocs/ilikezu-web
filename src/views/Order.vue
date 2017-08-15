@@ -135,8 +135,10 @@
 			getAddressAndSetDefault() {
 				this.$store.dispatch('GET_ADDRESS')
 					.then(res => {
-						if (!this.defaultAddress) {
+						if (!this.defaultAddress && res[0]) {
 							this.$store.dispatch('GET_DEFAULT_ADDRESS', res[0])
+						} else if (res.length <= 0) {
+							this.$store.dispatch('GET_DEFAULT_ADDRESS', null)
 						}
 					})
 					.catch(errorTip)
@@ -169,6 +171,11 @@
 			 * 下单，获取订单号
 			 */
 			async order() {
+
+				if (!this.defaultAddress || !this.defaultAddress.recordId) {
+					return errorTip('请添加收货地址')
+				}
+
 				// { proId: Long, addressId: Long, number: Integer, deliverTime: TimeStamp }
 				const { recordId: proId } = this.product.detail
 				const { recordId: addressId } = this.defaultAddress

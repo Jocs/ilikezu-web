@@ -179,6 +179,7 @@
 			bottom: 0;
 			display: flex;
 			box-shadow: 0 1px 2px #999;
+			background: #fff;
 			a {
 				flex: 1;
 				height: 2.5rem;

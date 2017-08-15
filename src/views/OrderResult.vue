@@ -4,7 +4,7 @@
 			<i class="iconfont icon-chenggong"></i>
 		</div>
 		<h3>租赁成功</h3>
-		<p>接下来乐租商场将协调交易达成...</p>
+		<p>接下来乐租商城将协调交易达成...</p>
 		<div class="form-control">
 			<a class="button ok" @click="jump('/home')">我知道了</a>
 		</div>

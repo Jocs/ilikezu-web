@@ -61,7 +61,7 @@ export const weixinConfig = params => {
 		timestamp,
 		noncestr: nonceStr,
 		sign: signature,
-		url: link,
+		link,
 		title,
 		desc,
 		imgUrl
