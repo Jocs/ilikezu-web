@@ -63,9 +63,11 @@
 				}, {
 					title: '我的收藏', label: '查看收藏列表', icon: 'icon-favorite', iconColor: '#00B358',
 					path: '/collection'
-				}, {
-					title: '推荐好友', label: '成为事业合伙人，获取丰厚收益', icon: 'icon-friends', iconColor: '#0969A2', path: '/getFans'
-				}, {
+				}, 
+				// {
+				// 	title: '推荐好友', label: '成为事业合伙人，获取丰厚收益', icon: 'icon-friends', iconColor: '#0969A2', path: '/getFans'
+				// },
+				{
 					title: '我的推荐', label: '您的粉丝', icon: 'icon-recommando', iconColor: '#a62800', path: '/fans'
 				}],
 				aboutNavs: [{

@@ -282,6 +282,7 @@
 				margin-top: .5rem;
 				padding: .5rem;
 				background: #fff;
+				user-select: none;
 				.title {
 					font-size: .8rem;
 				}
