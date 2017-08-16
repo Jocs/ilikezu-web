@@ -1,5 +1,5 @@
 export function fixed(price) {
-	return String(price).split('.')[1] ? price : price + '.00'
+	return price.toFixed(2)
 }
 /**
  * 手机号中间四位设置为*

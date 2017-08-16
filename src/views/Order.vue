@@ -80,6 +80,7 @@
 			ref="datePicker"
 			type="date"
 			v-model="pickerValue"
+			:startDate="startDate"
 			year-format="{value} 年"
 			month-format="{value} 月"
 			date-format="{value} 日">
@@ -96,7 +97,6 @@
 	import { mapState } from 'vuex'
 
 	const tomorow = new Date(+new Date() + 24 * 3600 * 1000).toLocaleString().split(' ')[0] + ' 00:00:00'
-	console.log(new Date(tomorow))
 	export default {
 		components: {
 			BarTop, Product
@@ -106,7 +106,8 @@
 				title: '确认订单',
 				recordId: '',
 				number: 0,
-				pickerValue: new Date(tomorow)
+				pickerValue: new Date(tomorow),
+				startDate: new Date(tomorow)
 			}
 		},
 		computed: {
