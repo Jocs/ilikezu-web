@@ -95,6 +95,8 @@ export default {
 	fanList: genResource(`${rootOrigin}/api/listrecommenfriends.xhtml`),
 	// 下单接口
 	order: genResource(`${rootOrigin}/api/order/addOrder.xhtml`),
+	// 取消订单
+	cancelOrder: genResource(`${rootOrigin}/api/order/cancelOrder.xhtml`),
 	// 微信支付
 	wechatPay: genResource(`${rootOrigin}/api/pay/mppay.xhtml`),
 	// 获取_f值

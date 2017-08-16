@@ -60,6 +60,9 @@ const actions = {
 	},
 	WECHAT_PAY({commit}, params) {
 		return Resources.wechatPay.post(params)
+	},
+	CANCEL_ORDER({ commit }, params) {
+		return Resources.cancelOrder.post(params)
 	}
 }
 

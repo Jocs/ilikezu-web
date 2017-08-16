@@ -189,7 +189,7 @@
 					})
 
 					if (data && data.tradeNo) {
-						console.log(data.tradeNo)
+
 						const { tradeNo } = data
 						const result = await this.$store.dispatch('WECHAT_PAY', {
 							tradeNo

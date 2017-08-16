@@ -34,8 +34,8 @@
 					</span>
 				</div>
 				<div class="tool" v-if="order.status === 0">
-					<a href="javascript:;">取消订单</a>
-					<a href="javascript:;" class="go-pay">去支付</a>
+					<a href="javascript:;" @click="cancelOrder(order.tradeNo)">取消订单</a>
+					<a href="javascript:;" class="go-pay" @click="reOrder(order.tradeNo)">去支付</a>
 				</div>
 			</div>
 			<div v-if="orLoading.status" class="loading">
@@ -59,7 +59,9 @@
 <script>
 	import BarTop from '../components/barTop.vue'
 	import Product from '../components/product.vue'
+	import { errorTip, wxPay } from '../common/util'
 	import { mapState } from 'vuex'
+	import { MessageBox } from 'mint-ui'
 
 	export default {
 		data() {
@@ -82,10 +84,49 @@
 		methods: {
 			getOrders(params) {
 				this.$store.dispatch('GET_ORDERS', params)
-				console.log(this.orderList)
+				// console.log(this.orderList)
 			},
 			loadMore() {
 				this.$store.dispatch('GET_ORDERS', {from: this.orderList.length, max: 2})
+			},
+			async cancelOrder(tradeNo) {
+				try {
+					await MessageBox.confirm('确定取消订单吗？')
+					const res = await this.$store.dispatch('CANCEL_ORDER', {tradeNo})
+					if (res.isSuccess) {
+						errorTip('成功取消订单')
+						this.getOrders({from: 0, max: 4})
+					} else {
+						throw new Error('取消订单失败')
+					}
+				} catch(e) {
+					console.log(e)
+					if(e !== 'cancel') {
+						errorTip('取消订单失败')
+					}
+				}
+			},
+			async reOrder(tradeNo) {
+				try {
+					const result = await this.$store.dispatch('WECHAT_PAY', { tradeNo })
+
+					if (result && result.data && result.data.params) {
+						wxPay(result.data.params, res => {
+							console.log(res)
+							if (res.err_msg === 'get_brand_wcpay_request:ok') {
+								this.$router.push('/orderResult')
+							} else {
+								console.log(res.errMsg)
+							}
+						})
+					} else {
+						throw new Error('获取微信支付参数失败')
+					}			
+				} catch(e) {
+					console.log(e)
+					errorTip('支付失败')
+				}
+
 			}
 		}
 	}
