@@ -7,7 +7,7 @@
 
 <script>
 
-	import Progressive from './progressive.js'
+	// import Progressive from './progressive.js'
 
 	export default {
 		props: {
@@ -19,12 +19,12 @@
 			content(val) {
 				if (val) {
 					this.$nextTick(() => {
-						new Progressive({
-							el: '.product-content',
-							lazyClass: 'lazy',
-							removePreview: false,
-							scale: true
-						}).fire()
+						// new Progressive({
+						// 	el: '.product-content',
+						// 	lazyClass: 'lazy',
+						// 	removePreview: false,
+						// 	scale: true
+						// }).fire()
 					})
 				}
 			}

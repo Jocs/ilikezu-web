@@ -1,5 +1,10 @@
 export function fixed(price) {
-	return price.toFixed(2)
+	const numPrice = +price
+	if (typeof numPrice === 'number' && numPrice >= 0) {
+		return numPrice.toFixed(2)
+	} else {
+		return price
+	}
 }
 /**
  * 手机号中间四位设置为*

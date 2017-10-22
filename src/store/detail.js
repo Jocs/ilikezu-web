@@ -24,8 +24,8 @@ const addAttrs = (json, sizeMap) => {
 		try	{ // 解决sizeMap中有可能JSON.parse会报错问题
 			const { width, height } = JSON.parse(sizeMap[dataSrc])
 			const radio = height / width
-			const src = `${dataSrc}@50w`
-			Object.assign(json.attr, {src, 'data-src': dataSrc}, {'class': 'preview lazy'})
+			// const src = `${dataSrc}@50w`
+			Object.assign(json.attr, {src: dataSrc, 'data-src': dataSrc}/*, {'class': 'preview lazy'}*/)
 			const child = {attr: json.attr, node: 'element', tag: 'img'}
 			const obj = {
 				child: [child],
