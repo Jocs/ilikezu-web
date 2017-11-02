@@ -67,7 +67,13 @@ const mutations = {
 const actions = {
 	GET_PRODUCT({commit}, params) {
 		return Resources.getProduct.post(params)
-			.then(res => res.data)
+			.then(res => {
+				if (res.isSuccess) {
+					return res.data
+				} else {
+					return Promise.reject(res.msg)
+				}
+			})
 			.then(res => {
 				res.product.logoUri = `${res.basePic}${res.product.logoUri}`
 				const product = {

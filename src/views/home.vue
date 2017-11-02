@@ -17,7 +17,7 @@
 						v-for="(b, index) of banner"
 						:key="index"
 					>
-						<img :src="b.imgUrl" alt="" @click="jump(b.productId)">
+						<img :src="b.imgUrl" alt="" @click="jump(b.recordId)">
 					</mt-swipe-item>
 				</mt-swipe>
 			</div>
@@ -90,7 +90,11 @@
 		},
 		methods: {
 			jump(id) {
-				this.$router.push(`/detail/${id}`)
+				if (!/^\d+$/.test(id) && /^http(s)?:\/\//.test(id)) {
+					window.location.href = id
+				} else {
+					this.$router.push(`/detail/${id}`)
+				}
 			},
 			handleInput(event) {
 				this.value = event

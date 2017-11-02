@@ -51,7 +51,7 @@ const actions = {
 					}
 					return {
 						imgUrl: `${res.data.basePic}${ob.logo}`,
-						productId: (ob.link.match(/proTypeId=(\d+)$/) || [])[1]
+						recordId: ob.link
 					}
 				})
 				commit('SET_BANNER', banner)
